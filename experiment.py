@@ -20,7 +20,7 @@ cwd = os.getcwd()
 sys.path.append(cwd + "/..")
 
 
-def main(configs, seed):
+def main(configs):
     print('Start Decision Transformer experiment...')
     print('\n')
     env_name = configs['experiment']['env_name']
