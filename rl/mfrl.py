@@ -8,7 +8,7 @@ import torch as th
 
 from .orl import ORL
 from data.data_handler import Data
-from decision_transformer.agents.dt import DecisionTransformer
+from decision_transformer.dt import DecisionTransformer
 
 
 
@@ -22,7 +22,7 @@ class MFRL(ORL):
         super(MFRL, self).__init__(config)
         # print('Initialize MFRL!')
         self.config = config
-        self.device = config['experiment']['device']
+        #self.device = config['experiment']['device']
         # self.seed = seed
         self._build()
 
@@ -34,13 +34,14 @@ class MFRL(ORL):
 
 
     def _set_data_handler(self):
-        self.data = Data(self.state_dim, self.act_dim, self.config, self.seed)
+        self.data = Data(self.state_dim, self.act_dim, self.config)
 
 
     def _set_agent(self):
         self.agent = DecisionTransformer(self.state_dim,
                                          self.act_dim,
-                                         self.config).to(self.device)
+                                         self.config)
+                                         # self.config).to(self.device)
 
 
     def learn(self):

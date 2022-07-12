@@ -41,14 +41,14 @@ class ORL:
 
         ''' adapt following to Env2DCylinder '''
         # self.state_dim = self.eval_env.observation_space.shape[0]
-        self.state_dim = self.states['obs']['shape']
+        self.state_dim = self.eval_env.states()['obs']['shape'][0]
         # self.act_dim = self.eval_env.action_space.shape[0]
-        self.act_dim = self.actions['shape']
+        self.act_dim = self.eval_env.actions()['shape'][0]
         self.rew_dim = 1
         # self.act_upper_lim = self.eval_env.action_space.high
-        self.act_upper_lim = self.actions['max_value']
+        self.act_upper_lim = self.eval_env.actions()['max_value']
         # self.act_lower_lim = self.eval_env.action_space.low
-        self.act_lower_lim = self.actions['min_value']
+        self.act_lower_lim = self.eval_env.actions()['min_value']
 
 
     def train_agent(self, NT):
@@ -68,7 +68,7 @@ class ORL:
     # def evaluate_agent(self, EE, gif, n, print_logs=True):
     def evaluate_agent(self, EE, n):
         env_targets = self.config['experiment']['env_targets']
-        device = self.config['experiment']['device']
+        # device = self.config['experiment']['device']
         # mode = self.config['experiment']['mode']
         scale = self.config['experiment']['scale']
         E = self.config['experiment']['max_env_len']

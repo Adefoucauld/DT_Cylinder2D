@@ -4,12 +4,12 @@ configurations = {
         'project_name': 'decision-transformer-project',
         'env_name': 'Env2DCylinder',
         'max_env_len': 1000,
-        'scale': 1000,
+        'scale': 1,
         'env_targets': [10000],
         # 'mode': 'normal', # Sparse: 'delayed'
         'pct_traj': 1.,
         # 'device': 'cpu',
-        'device': 'cuda:0',
+        #'device': 'cuda:0',
         # 'WandB': True,
     },
 

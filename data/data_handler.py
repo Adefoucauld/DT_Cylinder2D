@@ -5,7 +5,8 @@ import numpy as np
 from numpy.ma import concatenate
 import torch as th
 
-
+import os
+cwd = os.getcwd()
 
 # adapted from original code, decision-transformer/gym/experiment.py (start)
 def discount_cumsum(x, gamma):
@@ -23,16 +24,17 @@ class Data:
     Data Handler
         Handle the offline dataset and transform it to a training set
     """
-    def __init__(self, state_dim, act_dim, config,seed):
-        print('Initialize Data!')
-        random.seed(seed), np.random.seed(seed), th.manual_seed(seed)
+    def __init__(self, state_dim, act_dim, config):
+        # print('Initialize Data!')
+        # random.seed(seed), np.random.seed(seed), th.manual_seed(seed)
         
         self.state_dim, self.act_dim = state_dim, act_dim
         self.device = config['experiment']['device']
         self.config = config
 
-        data_path = 'C:/Users/Utilisateur/Documents/Imperial/Research project/decision_transf/test.pkl'
-        '''data path to check here'''
+        # data_path = 'C:/Users/Utilisateur/Documents/Imperial/Research project/decision_transf/test.pkl'
+        data_path = os.path.join(cwd,'/test.pkl')
+        # '''data path to check here'''
         with open(data_path, 'rb') as f: self.Trajs = pickle.load(f)
 
         # mode = config['experiment']['mode']
