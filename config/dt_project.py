@@ -3,9 +3,9 @@ configurations = {
     'experiment': {
         'project_name': 'decision-transformer-project',
         'env_name': 'Env2DCylinder',
-        'max_ep_len': 1000,
+        'max_ep_len': 100, #equals to number of actuation
         'scale': 1,
-        'env_targets': [1],
+        'env_targets': [0],
         # 'mode': 'normal', # Sparse: 'delayed'
         'pct_traj': 1.,
         # 'device': 'cpu',
