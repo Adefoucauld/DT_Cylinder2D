@@ -54,7 +54,7 @@ def main(configs):
 
     agent = experiment.learn()
 
-    th.save(agent, f'./saved_agents/dt-agent-{env_name}.pth.tar')
+    th.save(agent, f'dt-agent-{env_name}.pth.tar')
     
     # print('\n')
     # print('...End Decision Transformer experiment')

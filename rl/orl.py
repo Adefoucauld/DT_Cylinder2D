@@ -22,17 +22,9 @@ class ORL:
 
     def _set_env(self):
         env_name = self.config['experiment']['env_name']
-        # if env_name == 'hopper':
-        #     name = 'Hopper-v3'
-        # elif env_name == 'halfcheetah':
-        #     name = 'HalfCheetah-v3'
-        # elif env_name == 'walker2d':
-        #     name = 'Walker2d-v3'
         
         '''---> self.eval_env = resume_env(....)'''
-        self.eval_env = resume_env(plot = False, dump_CL = 100, dump_debug = 1, dump_vtu = 50)
-        
-        # # self.eval_env = gym.make(name) #MakeEnv(self.environment)
+        self.eval_env = resume_env(plot = False, dump_CL = 100, dump_debug = 1)
         
         ''' remove seed because no such thing in Env2DCylinder'''
         # self.eval_env.seed(self.seed)
@@ -42,12 +34,9 @@ class ORL:
         ''' adapt following to Env2DCylinder '''
         # self.state_dim = self.eval_env.observation_space.shape[0]
         self.state_dim = self.eval_env.states()['obs']['shape'][0]
-        # self.act_dim = self.eval_env.action_space.shape[0]
         self.act_dim = self.eval_env.actions()['shape'][0]
         self.rew_dim = 1
-        # self.act_upper_lim = self.eval_env.action_space.high
         self.act_upper_lim = self.eval_env.actions()['max_value']
-        # self.act_lower_lim = self.eval_env.action_space.low
         self.act_lower_lim = self.eval_env.actions()['min_value']
 
 
@@ -56,8 +45,7 @@ class ORL:
 
         Losses = []
         for nt in range(NT):
-            # if print_logs:
-                # print(f' [ Agent Training ] Step: {nt}   ', end='\r')
+            print(f' [ Agent Training ] Step: {nt}   ', end='\r')
             loss = self.agent.train_model(self.data)
             Losses.append(loss)
             if self.agent.scheduler: self.agent.scheduler.step()
@@ -69,9 +57,8 @@ class ORL:
     def evaluate_agent(self, EE, n):
         env_targets = self.config['experiment']['env_targets']
         # device = self.config['experiment']['device']
-        # mode = self.config['experiment']['mode']
         scale = self.config['experiment']['scale']
-        E = self.config['experiment']['max_env_len']
+        E = self.config['experiment']['max_ep_len']
 
         self.agent.eval()
 
@@ -80,10 +67,7 @@ class ORL:
             returns, lengths = [], []
 
             for ee in range(EE):
-                # if print_logs:
-                #     print(f' [ Agent Evaluation ] Target: {target_rew}, Episode: {ee}   ', end='\r')
-                # if ee > 0:
-                #     gif = False
+                print(f' [ Agent Evaluation ] Target: {target_rew}, Episode: {ee}   ', end='\r')
                 with th.no_grad():
                     # ret, length = self.agent.evaluate_model(
                     #                             self.eval_env, gif, n,

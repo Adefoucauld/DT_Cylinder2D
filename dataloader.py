@@ -54,7 +54,7 @@ def build_paths(dt_obs,dt_reward,dt_action):
         dataset = {'observations':dt_obs.loc[i].to_numpy().reshape(1,len(dt_obs.loc[i])),
                    'actions' : np.array([dt_action.Action_0.loc[i],dt_action.Action_1.loc[i]]).reshape(1,2),
                    'next_observations' : dt_obs.loc[i+1].to_numpy().reshape(1,len(dt_obs.loc[i])),
-                   'rewards' : dt_reward.Reward.loc[i]
+                   'rewards' : np.array([[dt_reward.Reward.loc[i]]])
                    }
         paths.append(dataset)
     return paths

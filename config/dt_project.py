@@ -3,9 +3,9 @@ configurations = {
     'experiment': {
         'project_name': 'decision-transformer-project',
         'env_name': 'Env2DCylinder',
-        'max_env_len': 1000,
+        'max_ep_len': 1000,
         'scale': 1,
-        'env_targets': [10000],
+        'env_targets': [1],
         # 'mode': 'normal', # Sparse: 'delayed'
         'pct_traj': 1.,
         # 'device': 'cpu',
@@ -38,12 +38,12 @@ configurations = {
     'learning': {
         'nIter': 10,
         'niIter': 1, # Episodes
-        'iter_steps': 10000, # Iterations/Episode
+        'iter_steps': 100, # Iterations/Episode
     },
 
     'evaluation': {
         'evaluate': True,
-        'eval_episodes': 100,
+        'eval_episodes': 10,
         'render': None,
     }
 

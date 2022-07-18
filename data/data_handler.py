@@ -82,7 +82,7 @@ class Data:
         batch_size = self.config['data']['batch_size']
         scale = self.config['experiment']['scale']
         K = self.config['agent']['K']
-        E = self.config['experiment']['max_env_len']
+        E = self.config['experiment']['max_ep_len']
         # print('batch_size: ', batch_size)
 
         idxs = np.random.choice(np.arange(self.nTrajs), size=batch_size, replace=True, p=self.p_sample)

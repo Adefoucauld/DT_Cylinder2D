@@ -23,7 +23,7 @@ class DecisionTransformer(nn.Module):
         super().__init__()
 
         # self.seed = seed
-        max_ep_len = config['experiment']['max_env_len']
+        max_ep_len = config['experiment']['max_ep_len']
         Ni = config['learning']['niIter']
         Nt = config['learning']['iter_steps']
         self.dt_config = dt_config = config['agent']
@@ -126,20 +126,6 @@ class DecisionTransformer(nn.Module):
         nn.utils.clip_grad_norm_(self.parameters(), .25)
         self.optimizer.step()
         
-        name = "loss.csv"
-        if (not os.path.exists("saved_models")):
-            os.mkdir("saved_models")
-        if (not os.path.exists("saved_models/" + name)):
-            with open("saved_models/" + name, "w") as csv_file:
-                spam_writer = csv.writer(csv_file, delimiter=";", lineterminator="\n")
-                spam_writer.writerow(["Loss"])
-                spam_writer.writerow([loss.detach().cpu().item()])
-        else:
-            with open("saved_models/" + name, "a") as csv_file:
-                spam_writer = csv.writer(csv_file, delimiter=";", lineterminator="\n")
-                spam_writer.writerow([loss.detach().cpu().item()])
-
-
         return loss.detach().cpu().item()
 
 
@@ -159,9 +145,8 @@ class DecisionTransformer(nn.Module):
         state_std = th.as_tensor(state_std).to(device=None)
 
         state = env.reset()
-        # if mode == 'noise': state = state + np.random.normal(0, 0.1, size=state.shape)
-
-        states = th.as_tensor(state).reshape(1, self.state_dim).to(device=None, dtype=th.float32)
+        
+        states = th.as_tensor(state['obs']).reshape(1, self.state_dim).to(device=None, dtype=th.float32)
         actions = th.zeros((0, self.act_dim), device=None, dtype=th.float32)
         rewards = th.zeros(0, device=None, dtype=th.float32)
 
@@ -172,11 +157,7 @@ class DecisionTransformer(nn.Module):
         # sim_states = []
 
         episode_return, episode_length = 0, 0
-        # if gif: GifObs = []
         for e in range(E):
-            # if gif:
-            #     gifobs = env.render(mode='rgb_array', width=400, height=400)
-            #     GifObs.append(gifobs)
 
             # add padding
             actions = th.cat([actions, th.zeros((1, self.act_dim), device=None)], dim=0)
@@ -193,7 +174,7 @@ class DecisionTransformer(nn.Module):
 
             state, _, reward = env.execute(action)
 
-            cur_state = th.as_tensor(state).to(device=None).reshape(1, self.state_dim)
+            cur_state = th.as_tensor(state['obs']).to(device=None).reshape(1, self.state_dim)
             states = th.cat([states, cur_state], dim=0)
             rewards[-1] = reward
 
@@ -210,27 +191,20 @@ class DecisionTransformer(nn.Module):
 
             # if done: break
 
-        # env.close()
-        # if gif:
-        #     print(' [ Saving a gif for evaluation ]     ')
-        #     env_name = self.config['experiment']['env_name']
-        #     env_type = self.config['data']['data_type']
-        #     exp_path = f'./gifs/{env_type}/{env_name}/seed:{self.seed}-iter:{n}.gif'
-        #     with imageio.get_writer(exp_path, mode='I', duration=0.01) as writer:
-        #         for obs_np in GifObs:
-        #             writer.append_data(obs_np)
-        name = "returns.csv"
-        if (not os.path.exists("saved_models")):
-            os.mkdir("saved_models")
-        if (not os.path.exists("saved_models/" + name)):
-            with open("saved_models/" + name, "w") as csv_file:
-                spam_writer = csv.writer(csv_file, delimiter=";", lineterminator="\n")
-                spam_writer.writerow(["Returns", "Episode_length"])
-                spam_writer.writerow([episode_return, episode_length])
-        else:
-            with open("saved_models/" + name, "a") as csv_file:
-                spam_writer = csv.writer(csv_file, delimiter=";", lineterminator="\n")
-                spam_writer.writerow([episode_return, episode_length])
+        env.close()
+        
+        # name = "returns.csv"
+        # if (not os.path.exists("saved_models")):
+        #     os.mkdir("saved_models")
+        # if (not os.path.exists("saved_models/" + name)):
+        #     with open("saved_models/" + name, "w") as csv_file:
+        #         spam_writer = csv.writer(csv_file, delimiter=";", lineterminator="\n")
+        #         spam_writer.writerow(["Returns", "Episode_length"])
+        #         spam_writer.writerow([episode_return, episode_length])
+        # else:
+        #     with open("infos/saved_models/" + name, "a") as csv_file:
+        #         spam_writer = csv.writer(csv_file, delimiter=";", lineterminator="\n")
+        #         spam_writer.writerow([episode_return, episode_length])
 
         return episode_return, episode_length
     # <<< adapted from original code, decision-transformer/gym/decision_transformer/evaluation/evaluate_episodes.py (end)

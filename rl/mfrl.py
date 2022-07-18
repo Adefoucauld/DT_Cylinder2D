@@ -51,10 +51,8 @@ class MFRL(ORL):
         EE = self.config['evaluation']['eval_episodes'] # Number of episodes
 
         logs = dict()
-        # gif = True
-        best_ret = 0.0
 
-        # print('Start Learning!')
+        print('Start Learning!')
         start_time = time.time()
         for n in range(N):
            
@@ -75,23 +73,22 @@ class MFRL(ORL):
             logs['training/train_loss_mean'] = np.mean(trainLosses)
             logs['training/train_loss_std'] = np.std(trainLosses)
             
-            name = "loss.csv"
-            if (not os.path.exists("saved_models")):
-                os.mkdir("saved_models")
-            if (not os.path.exists("saved_models/" + name)):
-                with open("saved_models/" + name, "w") as csv_file:
-                    spam_writer = csv.writer(csv_file, delimiter=";", lineterminator="\n")
-                    spam_writer.writerow(["Time", "Loss_mean", "Loss_std"])
-                    spam_writer.writerow([time.time() - start_time, np.mean(trainLosses), np.std(trainLosses)])
-            else:
-                with open("saved_models/" + name, "a") as csv_file:
-                    spam_writer = csv.writer(csv_file, delimiter=";", lineterminator="\n")
-                    spam_writer.writerow([time.time() - start_time, np.mean(trainLosses), np.std(trainLosses)])
+            # name = "loss.csv"
+            # if (not os.path.exists("saved_models")):
+            #     os.mkdir("saved_models")
+            # if (not os.path.exists("saved_models/" + name)):
+            #     with open("saved_models/" + name, "w") as csv_file:
+            #         spam_writer = csv.writer(csv_file, delimiter=";", lineterminator="\n")
+            #         spam_writer.writerow(["Time", "Loss_mean", "Loss_std"])
+            #         spam_writer.writerow([time.time() - start_time, np.mean(trainLosses), np.std(trainLosses)])
+            # else:
+            #     with open("saved_models/" + name, "a") as csv_file:
+            #         spam_writer = csv.writer(csv_file, delimiter=";", lineterminator="\n")
+            #         spam_writer.writerow([time.time() - start_time, np.mean(trainLosses), np.std(trainLosses)])
 
             # # log
-            # if print_logs:
-            #     for k, v in logs.items():
-            #         print(f'{k}: {v}')
+            for k, v in logs.items():
+                print(f'{k}: {v}')
 
             # # WandB
             # if self.config['experiment']['WandB']:

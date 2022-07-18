@@ -626,7 +626,9 @@ class Env2DCylinder(Environment):
                 plt.draw()
                 plt.pause(0.5)
 
-        if (self.inspection_params["dump_CL"] != False and self.solver_step % self.inspection_params["dump_CL"] == 0 and self.inspection_params["dump_CL"] < 10000):
+        if self.inspection_params["dump_CL"] == False:
+            pass
+        elif self.solver_step % self.inspection_params["dump_CL"] == 0 and self.inspection_params["dump_CL"] < 10000:
             # Display information in command line
             print("%s | Ep N: %4d, step: %4d, Rec Area: %.4f, drag: %.4f, lift: %.4f, jet_0: %.4f, jet_1: %.4f"%(self.simu_name,
             self.episode_number,
@@ -637,7 +639,9 @@ class Env2DCylinder(Environment):
             self.history_parameters["jet_0"].get()[-1],
             self.history_parameters["jet_1"].get()[-1]))
 
-        if (self.inspection_params["dump_debug"] != False and self.solver_step % self.inspection_params["dump_debug"] == 0 and self.inspection_params["dump_debug"] < 10000):
+        if self.inspection_params["dump_debug"] == False:
+            pass
+        elif self.solver_step % self.inspection_params["dump_debug"] == 0 and self.inspection_params["dump_debug"] < 10000:
             # Save everything that happens in a debug.csv file!
             name = "debug.csv"
             if(not os.path.exists("saved_models")):
@@ -771,7 +775,9 @@ class Env2DCylinder(Environment):
                             shutil.rmtree("best_model")
                         shutil.copytree("saved_models", "best_model")
 
-        if self.inspection_params["dump_vtu"]==True and self.inspection_params["dump_vtu"] < 10000 and self.solver_step % self.inspection_params["dump_vtu"] == 0:
+        if self.inspection_params["dump_vtu"]==False:
+            pass
+        elif self.inspection_params["dump_vtu"] < 10000 and self.solver_step % self.inspection_params["dump_vtu"] == 0:
 
             if not self.initialized_vtu:  # Initialize results .pvd output if not done already
                 self.u_out = File('results/u_out.pvd')
@@ -893,6 +899,7 @@ class Env2DCylinder(Environment):
         # Append last observation to pressure history buffer
         self.history_observations.appendleft(np.transpose(np.array(self.probes_values)))
 
+        #print(self.number_steps_execution)
         # Run for one action step (several -number_steps_execution- numerical timesteps keeping action=const but changing control)
         for crrt_control_nbr in range(self.number_steps_execution):
 
